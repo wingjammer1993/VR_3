@@ -14,6 +14,26 @@
 		</canvas>
 		<script type="text/javascript">
 
+
+			var keysdown = {};
+
+			window.addEventListener("keydown", function (event) {
+				if (event.defaultPrevented) {
+				return;
+				}
+				keysdown[event.key] = true;
+				event.preventDefault();
+			}, true);
+
+
+			window.addEventListener("keyup", function (event) {
+				if (event.defaultPrevented) {
+				return; // Do nothing if the event was already processed
+				}
+				keysdown[event.key] = false;
+				event.preventDefault();
+			}, true);
+
 			$(window).bind("load", function() {
 
 				//Variables representing the canvas and the canvas' context (the context is used for actually drawing on the canvas)
@@ -24,21 +44,36 @@
 				stars.push(new Stars(context, 10, 10));
 				stars.push(new Stars(context, 2500, 10));
 				stars.push(new Stars(context, 5500, 10));
-				stars.push(new Basket(context));
+				var basket_obj = new Basket(context);
 
 				//start drawing the first frame
 				requestAnimationFrame(mainLoop);
 
 				//Game Loop
 				function mainLoop() {
+					processInput();
 					update();
 					draw();
 					requestAnimationFrame(mainLoop); //keep reiterating through this loop
 				}
 
+				//Handle user input by adjusting ball velocity based on keys pressed
+				function processInput()
+				{
+					if(keysdown.ArrowLeft) {
+						basket_obj.pX = basket_obj.pX - 30 ;
+					}
+
+
+					if (keysdown.ArrowRight) {
+						basket_obj.pX = basket_obj.pX + 30;
+					}
+				}
+
 				//Here is where we would update the state of our game or simulation (e.g., make the copters move).
 				function update() {
 					stars.forEach(function(c) { c.update();})
+					basket_obj.update();
 				}
 
 				//Draw the scene. Here we simply erase what was previously drawn (e.g., where the copters used to be), then draw it again
@@ -59,6 +94,7 @@
 
 					//draw each copter
 					stars.forEach(function(c) { c.draw(); })
+					basket_obj.draw();
 
 					//restore the coordinate frame (in case we wanted to draw other things)
 					context.restore();
