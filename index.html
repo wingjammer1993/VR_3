@@ -1,19 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 	</head>
 	<body>
-		<canvas id="canvas" width="640" height="480">
-			  <img id="source" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/VanGogh-starry_night_edit.jpg/601px-VanGogh-starry_night_edit.jpg"
-       width="2" height=auto>
+		<canvas id="canvas" width="6400" height="4200">
+			<img id="source" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/VanGogh-starry_night_edit.jpg/601px-VanGogh-starry_night_edit.jpg"
+        	width="2" height=auto>
+			<img id="star" src="https://marketplace.canva.com/MACySNBkdKQ/1/thumbnail_large/canva-doodle-video-game-star-character-icon-MACySNBkdKQ.png" width="2" height=auto>
+			<script type="text/javascript" src="stars.js"></script>
 		</canvas>
 		<script type="text/javascript">
+
 			$(window).bind("load", function() {
 
 				//Variables representing the canvas and the canvas' context (the context is used for actually drawing on the canvas)
 				var canvas = document.getElementById("canvas");
 				var context = canvas.getContext("2d");
+
+				var stars = []
+				stars.push(new Stars(context, 10, 10));
+				stars.push(new Stars(context, 2500, 10));
+				stars.push(new Stars(context, 5500, 10));
 
 				//start drawing the first frame
 				requestAnimationFrame(mainLoop);
@@ -27,7 +35,7 @@
 
 				//Here is where we would update the state of our game or simulation (e.g., make the copters move).
 				function update() {
-
+					stars.forEach(function(c) { c.update();})
 				}
 
 				//Draw the scene. Here we simply erase what was previously drawn (e.g., where the copters used to be), then draw it again
@@ -36,14 +44,18 @@
 					//clear our drawing
 					context.clearRect(0, 0, canvas.width, canvas.height);
 
+					context.globalAlpha = 0.5;
+
 					var image = document.getElementById('source');
 					context.drawImage(image,0,0);
+
+					context.globalAlpha = 1;
 
 					//save the coordinate frame (in case we wanted to draw other things after the copters)
 					context.save();
 
 					//draw each copter
-
+					stars.forEach(function(c) { c.draw(); })
 
 					//restore the coordinate frame (in case we wanted to draw other things)
 					context.restore();
