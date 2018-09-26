@@ -4,11 +4,13 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 	</head>
 	<body>
-		<canvas id="canvas" width="6400" height="4200">
+		<canvas id="canvas" width="6400" height="4200" style="border: 1px solid black;">
 			<img id="source" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/VanGogh-starry_night_edit.jpg/601px-VanGogh-starry_night_edit.jpg"
         	width="2" height=auto>
 			<img id="star" src="https://marketplace.canva.com/MACySNBkdKQ/1/thumbnail_large/canva-doodle-video-game-star-character-icon-MACySNBkdKQ.png" width="2" height=auto>
+			<img id="basket" src="https://img.heypik.com/background/20180814/heypik-preparation-transparent-basket-cartoon_27730082.png?x-oss-process=image/watermark,image_c2h1aXlpbl9uZXcucG5n,g_center" width="2" height=auto>
 			<script type="text/javascript" src="stars.js"></script>
+			<script type="text/javascript" src="basket.js"></script>
 		</canvas>
 		<script type="text/javascript">
 
@@ -22,6 +24,7 @@
 				stars.push(new Stars(context, 10, 10));
 				stars.push(new Stars(context, 2500, 10));
 				stars.push(new Stars(context, 5500, 10));
+				stars.push(new Basket(context));
 
 				//start drawing the first frame
 				requestAnimationFrame(mainLoop);
