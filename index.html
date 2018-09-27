@@ -17,6 +17,7 @@
 		<input type="range"  min="1" max="60" value="60" onchange="updateFrameRate(this.value)"/>
 		<span id="FrameRateLabel">60</span>
 		<script type="text/javascript">
+			var timestep = 1000 / 60;
 
 			var maxFps = 60; //max FPS allowed
 			function updateFrameRate(newFrameRate)
@@ -60,7 +61,7 @@
 
 				var fps = 0; //this is the fps that is displayed to the user
 				var framesThisSecond = 0; //this is a counter that counts how many frames we draw every second
-
+				var delta = 0
 				//the following line sets a timer to go off every 1000ms (1s) which
 				//copies over the value of framesThisSecond to fps and then resets
 				//framesThisSecond to zero. Note this is an example of an anonymous function
@@ -80,11 +81,16 @@
 						requestAnimationFrame(mainLoop);
 						return;
 					}
-					delta = timestamp - lastFrameTimeMs;
+
+					// Track the accumulated time that hasn't been simulated yet
+					delta += timestamp - lastFrameTimeMs; // note += here
 					lastFrameTimeMs = timestamp;
 
 					processInput();
-					update(delta);
+					while(delta >= timestep){
+					update(timestep);
+					delta -= timestep;
+					}
 					draw();
 
 					requestAnimationFrame(mainLoop);
