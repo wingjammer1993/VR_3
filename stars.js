@@ -25,8 +25,6 @@ Stars.prototype.draw = function() {
 Stars.prototype.update = function() {
 
 	this.pY += this.velY;
-	console.log(this.pY);
-	console.log(this.context.canvas.clientHeight);
 
     if (this.pY > this.context.canvas.clientHeight - 2)
 	{
