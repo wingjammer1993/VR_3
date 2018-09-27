@@ -8,9 +8,14 @@
 			<img id="source" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/757px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg">
 			<img id="star" src="https://marketplace.canva.com/MACySNBkdKQ/1/thumbnail_large/canva-doodle-video-game-star-character-icon-MACySNBkdKQ.png">
 			<img id="basket" src="https://img.heypik.com/background/20180814/heypik-preparation-transparent-basket-cartoon_27730082.png?x-oss-process=image/watermark,image_c2h1aXlpbl9uZXcucG5n,g_center">
+			<script>
+				var score = 0;
+			</script>
 			<script type="text/javascript" src="basket.js"></script>
 			<script type="text/javascript" src="stars.js"></script>
 		</canvas>
+		<input type="range"  min="1" max="60" value="60" onchange="updateFrameRate(this.value)"/>
+		<span id="FrameRateLabel">60</span>
 		<script type="text/javascript">
 
 			var maxFps = 60; //max FPS allowed
@@ -99,9 +104,12 @@
 				}
 
 				//Here is where we would update the state of our game or simulation (e.g., make the copters move).
-				function update() {
-					stars.forEach(function(c) { c.update();})
+				function update(delta) {
+					stars.forEach(function(c) { c.update(delta);})
 					basket_obj.update();
+
+					if (frameCount < 100) {
+					console.log("stars[0].y: " + stars[0].pY);}
 				}
 
 				//Draw the scene. Here we simply erase what was previously drawn (e.g., where the copters used to be), then draw it again
@@ -130,10 +138,10 @@
 
 					//draw the fps counter
                 	context.fillText("FPS: " + fps, 10, 10);
+                	context.fillText("Score: " + score, 600, 10);
 					++framesThisSecond;
 					++frameCount;
 					if (frameCount < 100) {
-						console.log("stars[0].y: " + stars[0].pY);
 						console.log("frame: " + frameCount);
 					}
 				}

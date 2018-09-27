@@ -4,7 +4,7 @@ function Stars(context, basket_obj, pX, pY) {
     this.pX = pX;
     this.pY = pY;
     this.context = context;
-	this.velY = Math.abs(Math.random()*5 - 1);
+	this.velY = 0.1;
 	this.basket = basket_obj
 }
 
@@ -22,15 +22,14 @@ Stars.prototype.draw = function() {
     this.context.restore()
 }
 
-Stars.prototype.update = function() {
+Stars.prototype.update = function(delta) {
 
-	this.pY += this.velY;
-
+	this.pY += this.velY*delta;
     if (this.pY > this.context.canvas.clientHeight - 2)
 	{
 		this.pY = 10;
 		this.pX = Math.random() * (this.context.canvas.clientWidth - 50) + 50;
-		this.velY = Math.random() * 5
+		this.velY = Math.random()
 	}
 
 	if (this.pY > this.basket.pY - 5 && this.basket.pX - 30 < this.pX && this.pX < this.basket.pX + 30)
@@ -38,7 +37,8 @@ Stars.prototype.update = function() {
 
 	    this.pY = 10;
 		this.pX = Math.random() * (this.context.canvas.clientWidth - 50) + 50;
-		this.velY = Math.random() * 5
+		this.velY = Math.random()
+		score = score + 1
 	}
 
 }
