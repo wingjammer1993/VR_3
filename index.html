@@ -4,13 +4,12 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 	</head>
 	<body>
-		<canvas id="canvas" width="6400" height="4200" style="border: 1px solid black;">
-			<img id="source" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/VanGogh-starry_night_edit.jpg/601px-VanGogh-starry_night_edit.jpg"
-        	width="2" height=auto>
-			<img id="star" src="https://marketplace.canva.com/MACySNBkdKQ/1/thumbnail_large/canva-doodle-video-game-star-character-icon-MACySNBkdKQ.png" width="2" height=auto>
-			<img id="basket" src="https://img.heypik.com/background/20180814/heypik-preparation-transparent-basket-cartoon_27730082.png?x-oss-process=image/watermark,image_c2h1aXlpbl9uZXcucG5n,g_center" width="2" height=auto>
-			<script type="text/javascript" src="stars.js"></script>
+		<canvas id="canvas" width="757" height="600" style="border: 1px solid black;">
+			<img id="source" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/757px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg">
+			<img id="star" src="https://marketplace.canva.com/MACySNBkdKQ/1/thumbnail_large/canva-doodle-video-game-star-character-icon-MACySNBkdKQ.png">
+			<img id="basket" src="https://img.heypik.com/background/20180814/heypik-preparation-transparent-basket-cartoon_27730082.png?x-oss-process=image/watermark,image_c2h1aXlpbl9uZXcucG5n,g_center">
 			<script type="text/javascript" src="basket.js"></script>
+			<script type="text/javascript" src="stars.js"></script>
 		</canvas>
 		<script type="text/javascript">
 
@@ -41,11 +40,15 @@
 				var context = canvas.getContext("2d");
 
 				var stars = []
-				stars.push(new Stars(context, 10, 10));
-				stars.push(new Stars(context, 2500, 10));
-				stars.push(new Stars(context, 5500, 10));
 				var basket_obj = new Basket(context);
+				stars.push(new Stars(context, basket_obj, 10, 10));
+				stars.push(new Stars(context, basket_obj, 300, 10));
+				stars.push(new Stars(context, basket_obj, 500, 10));
 
+				var fps = 0;
+				var framesThisSecond = 0;
+
+				setInterval(function() { fps = framesThisSecond; framesThisSecond = 0; }, 1000);
 				//start drawing the first frame
 				requestAnimationFrame(mainLoop);
 
@@ -61,12 +64,12 @@
 				function processInput()
 				{
 					if(keysdown.ArrowLeft) {
-						basket_obj.pX = basket_obj.pX - 30 ;
+						basket_obj.pX = basket_obj.pX - 10 ;
 					}
 
 
 					if (keysdown.ArrowRight) {
-						basket_obj.pX = basket_obj.pX + 30;
+						basket_obj.pX = basket_obj.pX + 10;
 					}
 				}
 
@@ -92,12 +95,17 @@
 					//save the coordinate frame (in case we wanted to draw other things after the copters)
 					context.save();
 
-					//draw each copter
 					stars.forEach(function(c) { c.draw(); })
+					context.save();
+					context.restore();
 					basket_obj.draw();
 
 					//restore the coordinate frame (in case we wanted to draw other things)
 					context.restore();
+
+					//draw the fps counter
+                	context.fillText("FPS: " + fps, 10, 10);
+					++framesThisSecond;
 				}
 			});
 		</script>
